@@ -1,0 +1,166 @@
+﻿@page
+@model Ofgem.GBI.ExternalPortal.Web.Pages.Measures.UploadMeasuresModel
+@using Ofgem.GBI.ExternalPortal.Web.Common.Constants
+@functions {
+}
+
+@if (Model.FailedCsvValidation)
+{
+	ViewData["Title"] = "Error: Measures Upload Page";
+}
+else {
+	ViewData["Title"] = "Measures Upload Page";
+}
+
+<style>
+	.custom-file-upload {
+		font-size: 1.1875rem;
+		line-height: 1.3157894737;
+		color: #0b0c0c;
+		font-family: "GDS Transport", arial, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		border: 1px solid #ccc;
+		display: inline-block;
+		padding: 6px 12px;
+		cursor: pointer;
+		margin: 0;
+	}
+    .upload-img {
+        position: relative;
+        top: 5px;
+	}
+	.custom-file-input {
+		font-family: "GDS Transport", arial, sans-serif;
+		color: #0b0c0c;
+		font-size: 1.1875rem;
+		height: 24px;
+		-webkit-font-smoothing: antialiased;
+		line-height: 1.3157894737
+	}
+
+	input[type=file]::file-selector-button {
+		display: none;
+	}
+</style>
+
+<a data-test-id="upload-measures-a-back-button" type="submit" class="govuk-back-link" asp-page="/Home">Back</a>
+
+<div id="measures-upload-component">
+
+    @if (Model.FailedCsvValidation)
+    {
+        <div data-test-id="upload-measures-div-error-list" class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+                <h2 class="govuk-error-summary__title"> There is a problem </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+
+						@{
+							if (Model?.MeasuresCsvErrors?.NoFileSelected == true)
+							{
+								<li data-test-id="upload-measures-li-no-file-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationNoFileText)</a> </li>
+							}
+							if (Model?.MeasuresCsvErrors?.FileIsEmpty == true)
+							{
+								<li data-test-id="upload-measures-li-empty-file-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationFileIsEmptyText)</a> </li>
+							}
+							if (Model?.MeasuresCsvErrors?.InvalidFileType == true)
+							{
+								<li data-test-id="upload-measures-li-invalid-filetype-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationInvalidFileTypeText)</a> </li>
+							}
+							if (Model?.MeasuresCsvErrors?.NotGbisSchema == true)
+							{
+								<li data-test-id="upload-measures-li-invalid-header-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationNotGBISSchemaText)</a> </li>
+							}
+							if (Model?.MeasuresCsvErrors?.ExceedsMaxRows == true)
+							{
+								<li data-test-id="upload-measures-li-maxrows-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationExceedsMaxRowsText)</a> </li>
+							}
+							if (Model?.MeasuresCsvErrors?.ExceedsMaxFileSize == true)
+							{
+								<li data-test-id="upload-measures-li-maxfilesize-error-message"> <a href="#meaures-upload-form">@(UploadMeasuresConstants.TemplateText.CsvValidationExceedsMaxFileSizeText)</a> </li>
+							}
+						}
+
+					</ul>
+				</div>
+			</div>
+		</div>
+
+    }
+
+
+    <h1 class="govuk-heading-xl"> Upload measures file </h1>
+
+    <p class="govuk-body"> Any file containing measures you upload must be a CSV file.</p>
+
+    <br>
+
+	<div data-test-id="upload-measures-class-govuk-error-style" class="govuk-form-group @(Model?.FailedCsvValidation == true ? "govuk-form-group--error" : "" ) ">
+
+		<form  data-test-id="upload-measures-form-upload-measures-csv" method="post" enctype="multipart/form-data" id="measures-upload-form" novalidate>
+
+			<label for="file-upload" class="custom-file-upload">
+				<svg class="upload-img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+					<path d="M11 14.9861C11 15.5384 11.4477 15.9861 12 15.9861C12.5523 15.9861 13 15.5384 13 14.9861V7.82831L16.2428 11.0711L17.657 9.65685L12.0001 4L6.34326 9.65685L7.75748 11.0711L11 7.82854V14.9861Z" fill="currentColor" />
+					<path d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z" fill="currentColor" />
+				</svg> Choose file
+			</label>
+
+		@if (Model?.FailedCsvValidation == true)
+		{
+			<div data-test-id="upload-measures-div-form-error-list" class="govuk-error-summary__body">
+				@{
+					if (Model?.MeasuresCsvErrors?.NoFileSelected == true)
+					{
+						<p data-test-id="upload-measures-p-no-file-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationNoFileText)</p>
+					}
+					if (Model?.MeasuresCsvErrors?.FileIsEmpty == true)
+					{
+						<p data-test-id="upload-measures-p-empty-file-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationFileIsEmptyText)</p>
+					}
+					if (Model?.MeasuresCsvErrors?.InvalidFileType == true)
+					{
+						<p data-test-id="upload-measures-p-invalid-filetype-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationInvalidFileTypeText)</p>
+					}
+					if (Model?.MeasuresCsvErrors?.NotGbisSchema == true)
+					{
+						<p data-test-id="upload-measures-p-invalid-header-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationNotGBISSchemaText)</p>
+					}
+					if (Model?.MeasuresCsvErrors?.ExceedsMaxRows == true)
+					{
+						<p data-test-id="upload-measures-p-maxrows-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationExceedsMaxRowsText)</p>
+					}
+					if (Model?.MeasuresCsvErrors?.ExceedsMaxFileSize == true)
+					{
+						<p data-test-id="upload-measures-p-maxfilesize-error-message" class="govuk-error-message">@(UploadMeasuresConstants.TemplateText.CsvValidationExceedsMaxFileSizeText)</p>
+					}
+				}
+			</div>
+		}
+			<input data-test-id="upload-measures-input-upload-measures-csv"
+			class="custom-file-input"
+			id="file-upload"
+			type="file"
+			name="MeasuresUploadFile"
+			accept=".csv"
+			tabindex="-1"
+			aria-label="Upload a file"
+			title="file-upload" />
+		</form>
+
+	</div>
+
+	<button  data-test-id="upload-measures-btn-submit" class="govuk-button" form="measures-upload-form" data-module="govuk-button" type="submit"> Upload a measure file</button>
+
+<hr class="govuk-section-break govuk-section-break--1 govuk-section-break--visible">
+
+    <br>
+
+    <h1 class="govuk-heading-l"> Get help </h1>
+
+    <p class="govuk-body"> <a href="#">How to upload a measure (open a new tab)</a> </p>
+
+    <p class="govuk-body"> <a href="#">What you will need to upload a Measure (opens in a new tab)</a> </p>
+
+</div>

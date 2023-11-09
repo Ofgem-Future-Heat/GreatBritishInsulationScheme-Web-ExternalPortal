@@ -1,0 +1,291 @@
+﻿@page
+@model Ofgem.GBI.ExternalPortal.Web.Pages.ErrorReports.ExistingErrorReportsModel
+@{
+}
+
+<style>
+    #tabs {
+        position: relative;
+        min-height: 200px;
+        clear: both;
+        margin: 25px 0;
+    }
+
+    .tab {
+        float: left;
+        border-bottom: 1px solid #b1b4b6;
+        margin-right: 5px;
+    }
+
+    .tab label {
+        background: #eee;
+        padding: 10px;
+        margin-left: -1px;
+        position: relative;
+        left: 1px;
+        z-index: 2;
+        margin-top: -5px;
+        margin-bottom: -1px;
+        padding-right: 19px;
+        padding-left: 19px;
+        color: #0b0c0c;
+        font-size: 1.1875rem;
+        line-height: 1.3157894737;
+    }
+
+    .tab [type=radio] {
+        display: none;
+    }
+
+    .table-content {
+        position: absolute;
+        top: 28px;
+        left: 0;
+        background: white;
+        right: 0;
+        bottom: 0;
+        padding: 20px;
+        opacity: 0;
+        display: block;
+        border: 1px solid #b1b4b6;
+        max-width: 600px;
+        max-height: 600px;
+        height: 600px;
+        width: 600px;
+        overflow: auto;
+        overflow-x: hidden;
+        margin-top: 12px;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    input[type=radio]:checked + label {
+        border: 1px solid #b1b4b6 !important;
+        border-bottom: 0 !important;
+        background-color: white !important;
+        text-decoration: none;
+    }
+
+    input[type=radio]:not(:checked) + label {
+        padding-bottom: 8px !important;
+        text-decoration-thickness: max(1px, 0.0625rem);
+        text-underline-offset: 0.1578em;
+    }
+
+    input[type=radio]:checked ~ label ~ div.table-content {
+        z-index: 1;
+        opacity: 1;
+    }
+
+    input[type=radio] ~ label ~ div.table-content {
+        z-index: 0;
+        opacity: 0;
+    }
+
+    .help-content-wrapper {
+        padding-top: 375px;
+    }
+    
+    .govuk-table {
+        table-layout: fixed
+    }
+    
+    .file-name-cell {
+        word-wrap: break-word
+    }
+
+    .file-download-cell {
+        text-align: end
+    }
+
+    .govuk-link:visited {
+        color: #4c2c92;
+    }
+
+    .err-page-a {
+        margin-bottom: 40px;
+    }
+    
+    .return-to-homepage-a {
+        margin-top: 40px;
+    }
+</style>
+
+<div class="govuk-width-container">
+        <a data-test-id="existing-error-reports-a-back-button" class="govuk-back-link err-page-a" asp-page="/Home">Back</a>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <h1 class="govuk-heading-xl">Existing error reports</h1>
+                <p class="govuk-body">All existing error reports are listed here by what stage they're at in the process of validation.</p>
+                <p class="govuk-body">This list of error reports <b>includes all reports generated</b> as a result of you uploading a notification template. The <b>most recent reports are shown first.</b></p>
+                <p class="govuk-body">You should download any relevant error report then <strong>follow the next steps</strong>.</p>
+                <div id="tabs">
+                    <div class="tab">
+                    <input type="radio" id="tab-1" aria-controls="stage-1-error-validation-results-table" name="tab-group-1" checked>
+                        <label for="tab-1" class="govuk-tabs__tab" id="tab_stage-1" tabindex="0" data-test-id="stage1-tab">Stage 1</label>
+                        <div id="stage-1-error-validation-results-table" class="table-content">
+                            <h2 class="govuk-heading-l">Stage 1 error reports</h2>
+                            <table class="govuk-table" data-test-id="stage-1-table">
+                                <thead class="govuk-table__head" data-test-id="stage2-table-header">
+                                    <tr class="govuk-table__row" data-test-id="stage2-table-header-row">
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Date</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Time</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">File name</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body" data-test-id="stage-1-validation-results">
+                                    @{
+                                        foreach (var stage1ValidationResult in @Model.Stage1ValidationResults)
+                                        {
+                                            <tr class="govuk-table__row" data-test-id="validation-results-row">
+                                                <th scope="row" class="govuk-table__header" data-test-id="stage1-validation-result-date">@stage1ValidationResult.DateTime.ToShortDateString()</th>
+                                                <td class="govuk-table__cell" data-test-id="stage1-validation-result-time">@stage1ValidationResult.DateTime.ToString(@"h\:mm tt")</td>
+                                                <td class="govuk-table__cell file-name-cell" data-test-id="stage1-validation-result-file-name">@stage1ValidationResult.FileName</td>
+                                                <td class="govuk-table__cell file-download-cell "><a class="govuk-link" asp-page-handler="DownloadErrorReport" asp-route-documentId=@stage1ValidationResult.DocumentId asp-route-fileName=@stage1ValidationResult.FileName asp-route-stage=@stage1ValidationResult.ErrorStage data-test-id="stage1-error-report">Download error report</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab">
+                    <input type="radio" id="tab-2" aria-controls="stage-2-error-validation-results-table" name="tab-group-1">
+                        <label for="tab-2" class="govuk-tabs__tab" id="tab_stage-2" tabindex="0" data-test-id="stage2-tab">Stage 2</label>
+                        <div id="stage-2-error-validation-results-table" class="table-content">
+                            <h2 class="govuk-heading-l">Stage 2 error reports</h2>
+                            <table class="govuk-table" data-test-id="stage2-table">
+                                <thead class="govuk-table__head" data-test-id="stage2-table-header">
+                                    <tr class="govuk-table__row" data-test-id="stage2-header-row">
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Date</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Time</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">File name</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body" data-test-id="stage-2-validation-results">
+                                    @{
+                                        foreach (var stage2ValidationResult in @Model.Stage2ValidationResults)
+                                        {
+                                            <tr class="govuk-table__row" data-test-id="validation-results-row">
+                                                <th scope="row" class="govuk-table__header" data-test-id="stage2-validation-result-date">@stage2ValidationResult.DateTime.ToShortDateString()</th>
+                                                <td class="govuk-table__cell" data-test-id="stage2-validation-result-time">@stage2ValidationResult.DateTime.ToString(@"h\:mm tt")</td>
+                                                <td class="govuk-table__cell file-name-cell" data-test-id="stage2-validation-result-file-name">@stage2ValidationResult.FileName</td>
+                                                <td class="govuk-table__cell file-download-cell"><a class="govuk-link" asp-page-handler="DownloadErrorReport" asp-route-documentId=@stage2ValidationResult.DocumentId asp-route-fileName=@stage2ValidationResult.FileName asp-route-stage=@stage2ValidationResult.ErrorStage data-test-id="stage2-error-report">Download error report</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="govuk-grid-column-one-third">
+                <h2 class="govuk-heading-m">
+                    Next steps
+                </h2>
+                <div data-module="appstepnav" id="step-by-step-navigation" class="app-step-nav govuk-!-display-none-print app-step-nav--active" data-show-text="Show" data-hide-text="Hide" data-show-all-text="Show all steps" data-hide-all-text="Hide all steps">
+
+                    <ol class="app-step-nav__steps" id="stepByStep">
+                        <li class="app-step-nav__step js-step app-step-nav__step--active" aria-current="step" id="">
+                            <div class="app-step-nav__header js-toggle-panel" data-position="1">
+                                <h3 class="app-step-nav__title">
+                                    <span class="app-step-nav__circle app-step-nav__circle--number">
+                                        <span class="app-step-nav__circle-inner">
+                                            <span class="app-step-nav__circle-background">
+                                                <span class="govuk-visually-hidden govuk-!-display-none-print">Step</span> 1<span class="govuk-visually-hidden govuk-!-display-none-print" aria-hidden="true">:</span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="js-step-title">
+                                        <button class="app-step-nav__button app-step-nav__button--title js-step-title-button" aria-expanded="false" aria-controls="step-panel-check-you-re-allowed-to-drive-1">
+                                            <span class="app-step-nav____title-text-focus">
+                                                <span class="app-step-nav__title-text js-step-title-text">
+                                                    Download error report
+                                                </span>
+                                                <span class="govuk-visually-hidden app-step-nav__section-heading-divider">, </span>
+                                            </span>
+                                        </button>
+                                    </span>
+                                </h3>
+                            </div>
+                            <div class="app-step-nav__panel js-panel" id="step-panel-check-you-re-allowed-to-drive-1">
+                                <p class="app-step-nav__paragraph">Download the error report.</p>
+                            </div>
+                        </li>
+
+                        <li class="app-step-nav__step js-step" id="get-a-provisional-licence">
+                            <div class="app-step-nav__header js-toggle-panel" data-position="2">
+                                <h3 class="app-step-nav__title">
+                                    <span class="app-step-nav__circle app-step-nav__circle--number">
+                                        <span class="app-step-nav__circle-inner">
+                                            <span class="app-step-nav__circle-background">
+                                                <span class="govuk-visually-hidden govuk-!-display-none-print">Step</span> 2<span class="govuk-visually-hidden govuk-!-display-none-print" aria-hidden="true">:</span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="js-step-title">
+                                        <button class="app-step-nav__button app-step-nav__button--title js-step-title-button" aria-expanded="false" aria-controls="step-panel-get-a-provisional-licence-2">
+                                            <span class="app-step-nav____title-text-focus">
+                                                <span class="app-step-nav__title-text js-step-title-text">
+                                                    Fix outstanding errors
+                                                </span>
+                                                <span class="govuk-visually-hidden app-step-nav__section-heading-divider">, </span>
+                                            </span>
+                                        </button>
+                                    </span>
+                                </h3>
+                            </div>
+                            <div class="app-step-nav__panel js-panel" id="step-panel-get-a-provisional-licence-2">
+                                <p class="app-step-nav__paragraph">Take the necessary steps to fix any errors with the measures. The errors and how you fix them will be detailed in the report.</p>
+                            </div>
+                        </li>
+
+                        <li class="app-step-nav__step js-step" id="driving-lessons-and-practice">
+                            <div class="app-step-nav__header js-toggle-panel" data-position="3">
+                                <h3 class="app-step-nav__title">
+                                    <span class="app-step-nav__circle app-step-nav__circle--number">
+                                        <span class="app-step-nav__circle-inner">
+                                            <span class="app-step-nav__circle-background">
+                                                <span class="govuk-visually-hidden govuk-!-display-none-print">Step</span> 3<span class="govuk-visually-hidden govuk-!-display-none-print" aria-hidden="true">:</span>
+                                            </span>
+                                        </span>
+                                    </span>
+                                    <span class="js-step-title">
+                                        <button class="app-step-nav__button app-step-nav__button--title js-step-title-button" aria-expanded="false" aria-controls="step-panel-driving-lessons-and-practice-3">
+                                            <span class="app-step-nav____title-text-focus">
+                                                <span class="app-step-nav__title-text js-step-title-text">
+                                                    Upload updated measure file
+                                                </span><span class="govuk-visually-hidden app-step-nav__section-heading-divider">, </span>
+                                            </span>
+                                        </button>
+                                    </span>
+                                </h3>
+                            </div>
+                            <div class="app-step-nav__panel js-panel" id="step-panel-driving-lessons-and-practice-3">
+                                <p class="app-step-nav__paragraph">After fixing the errors in the report, you should save the document as a CSV file.</p>
+                                <p class="app-step-nav__paragraph">Then, you should return to the <a data-test-id="existing-error-reports-step-navigation-homepage-button" asp-page="/Home">Homepage</a> and upload the updated CSV file.</p>
+                                <ol class="app-step-nav__list " data-length="4">
+                                    <li class="app-step-nav__list-item js-list-item ">
+                                        <a data-test-id="existing-error-reports-step-navigation-upload-measures-button" data-position="3.1" class="app-step-nav__link js-link" asp-page="/Measures/UploadMeasures">Upload a Measure</a>
+                                    </li>
+                                </ol>
+                            </div>
+                        </li>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+    <div class="help-content-wrapper">
+
+        <p class="govuk-body return-to-homepage-a"><a data-test-id="existing-error-reports-return-to-homepage-button" asp-page="/Home">Return to homepage</a></p>
+
+        <h3 class="govuk-heading-l">Get help</h3>
+        <p><a href="#" target="_blank">How to upload a measure (opens in a new tab)</a></p>
+        <p><a href="#" target="_blank">What you will need to upload a Measure (opens in a new tab)</a></p>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+@page
+@model IsActiveModel
+@using System.Security.Claims
+@using Ofgem.GBI.ExternalPortal.Application.UserManagement.Constants
+
+<h1 class="govuk-heading-xl">POC Auth - Active check</h1>
+
+<p>Name: @HttpContext.User.Identity?.Name</p>
+<p>Email: @HttpContext.User.Claims.FirstOrDefault(c=>c.Type.Equals(ClaimTypes.Email))?.Value</p>
+<p>Sub: @HttpContext.User.Claims.FirstOrDefault(c=>c.Type.Equals(ClaimTypes.NameIdentifier))?.Value</p>
+<p>CustomClaim AccountId: @HttpContext.User.Claims.FirstOrDefault(c=>c.Type.Equals("EmployerAccountId"))?.Value</p>
+<a asp-route="/@OneLoginConstants.SignOutUrl" class="govuk-button">Sign Out</a>

@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <SignAssembly>False</SignAssembly>
+        <UserSecretsId>c0ab1768-1985-4934-9f54-3164c2b6d57d</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ApplicationInsightsResourceId>/subscriptions/5b5da13f-b609-4ea4-b5cd-a46c65cf95aa/resourceGroups/uks-dk8s-fdev-app-insights-rg-01/providers/microsoft.insights/components/uks-dk8s-fdev-app-insights</ApplicationInsightsResourceId>
+        <DockerfileContext>..\..</DockerfileContext>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.0.0" />
+        <PackageReference Include="Azure.Identity" Version="1.6.0" />
+        <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.15.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.7" />
+        <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.22.0" />
+        <PackageReference Include="Microsoft.IdentityModel.KeyVaultExtensions" Version="6.22.0" />
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
+        <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+        <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="4.0.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
+        <PackageReference Include="System.Security.Cryptography.Xml" Version="6.0.1" />
+        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+        <!--<PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.21" />-->
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.6" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Update="private_key.pem">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="public_key.pem">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="wwwroot\assets\images\favicon.ico" />
+      <None Include="wwwroot\assets\images\govuk-apple-touch-icon-152x152.png" />
+      <None Include="wwwroot\assets\images\govuk-apple-touch-icon-167x167.png" />
+      <None Include="wwwroot\assets\images\govuk-apple-touch-icon-180x180.png" />
+      <None Include="wwwroot\assets\images\govuk-apple-touch-icon.png" />
+      <None Include="wwwroot\assets\images\govuk-mask-icon.svg" />
+    </ItemGroup>
+    <ItemGroup>
+	  <ProjectReference Include="..\Ofgem.GBI.ExternalPortal.Infrastructure\Ofgem.GBI.ExternalPortal.Infrastructure.csproj" />
+	  <ProjectReference Include="..\Ofgem.GBI.ExternalPortal.Application\Ofgem.GBI.ExternalPortal.Application.csproj" />
+	</ItemGroup>
+</Project>

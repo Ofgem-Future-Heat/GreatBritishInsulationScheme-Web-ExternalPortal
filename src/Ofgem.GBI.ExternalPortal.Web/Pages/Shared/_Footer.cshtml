@@ -1,0 +1,45 @@
+﻿@* Generator: MvcView<object> *@
+@model Ofgem.GBI.ExternalPortal.Web.Common.Models.IFooterViewModel
+@using Ofgem.GBI.ExternalPortal.Web.Common.Models.Links
+
+@if (Model.UseLegacyStyles)
+{
+    <footer class="group js-footer" id="footer" role="contentinfo" aria-label="Great British Insulation Scheme Footer">
+        <div class="footer-wrapper">
+            <div class="footer-meta">
+                <div class="footer-meta-inner">
+                    <ul class="platform-help-links" data-test-id="footer-link-list">
+                        @Html.Raw(Model.RenderListItemLink<Accessibility>())
+                        @Html.Raw(Model.RenderListItemLink<Cookies>())
+                        @Html.Raw(Model.RenderListItemLink<Privacy>())
+                    </ul>
+                    <div class="open-government-licence" data-test-id="ofgem-copyright-date">
+                        <p>
+                            © Ofgem @DateTime.Now.Year
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+}
+else
+{
+    <footer class="govuk-footer" role="contentinfo" aria-label="Great British Insulation Scheme Footer">
+        <div class="govuk-width-container" role="navigation">
+            <div class="govuk-footer__meta">
+                <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+                    <h2 class="govuk-visually-hidden">Support links</h2>
+                    <ul class="govuk-footer__inline-list" data-test-id="footer-link-list">
+                        @Html.Raw(Model.RenderListItemLink<Accessibility>(@class: "govuk-footer__inline-list-item", @role: "listitem"))
+                        @Html.Raw(Model.RenderListItemLink<Cookies>(@class: "govuk-footer__inline-list-item", @role: "listitem"))
+                        @Html.Raw(Model.RenderListItemLink<Privacy>(@class: "govuk-footer__inline-list-item", @role: "listitem"))
+                    </ul>
+                    <span class="govuk-footer__licence-description" data-test-id="ofgem-copyright-date">
+                        © Ofgem @DateTime.Now.Year
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+}

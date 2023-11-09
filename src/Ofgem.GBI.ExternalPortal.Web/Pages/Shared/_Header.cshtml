@@ -1,0 +1,39 @@
+@* Generator: MvcView<object> *@
+@model Ofgem.GBI.ExternalPortal.Web.Common.Models.IHeaderViewModel
+@using Ofgem.GBI.ExternalPortal.Web.Common.Models.Links
+
+<header class="govuk-header" id="welcomeLogout" role="banner" data-module="header" aria-label="Great British Insulation Scheme Header">
+    <div class="govuk-header__container govuk-width-container">
+        <div class="govuk-header__logo" data-test-id="header-logo">
+            @Html.Raw(Model.RenderLink<OfgemLogo>())
+        </div>
+        <div class="govuk-header__content" data-test-id="header-gbis-title">
+            @Html.Raw(Model.RenderLink<GbisHome>())
+        </div>
+        @if (User?.Identity?.IsAuthenticated == true)
+        {
+            <div class="govuk-header__link one-login-header_link" data-test-id="header-one-login-signout">
+                @Html.Raw(Model.RenderLink<SignOut>())
+            </div>
+        }
+        else
+        {
+            <div class="govuk-header__link one-login-header_link" data-test-id="header-one-login-signin">
+                @Html.Raw(Model.RenderLink<SignIn>())
+            </div>
+        }
+    </div>
+</header>
+
+<div class="govuk-width-container" role="complementary" aria-label="Feedback banner">
+    <div class="govuk-phase-banner" data-test-id="phase-banner">
+        <p class="govuk-phase-banner__content">
+            <strong class="govuk-tag govuk-phase-banner__content__tag">
+                @Model.PhaseBannerTag
+            </strong>
+            <span class="govuk-phase-banner__text">
+                This is a new service - your @Html.Raw(Model.RenderLink<Feedback>()) will help us to improve it.
+            </span>
+        </p>
+    </div>
+</div>

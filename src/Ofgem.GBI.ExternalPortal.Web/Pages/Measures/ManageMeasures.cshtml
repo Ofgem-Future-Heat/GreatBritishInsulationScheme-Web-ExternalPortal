@@ -1,0 +1,14 @@
+﻿@page
+@using Ofgem.GBI.ExternalPortal.Application.UserManagement.Constants;
+@model Ofgem.GBI.ExternalPortal.Web.Pages.Measures.ManageMeasuresModel
+@{
+}
+<a data-test-id="manage-measures-a-back-button" type="submit" class="govuk-back-link" asp-page="/Home">Back</a>
+
+<h1 class="govuk-heading-l"> Manage measures </h1>
+
+<a data-test-id="manage-measures-navigate-form" asp-page="./UploadMeasures" class="govuk-button">
+    Upload a measure file
+</a>
+<br />
+<a data-test-id="manage-measures-a-sign-out" href="/@OneLoginConstants.SignOutUrl" class="govuk-button">Sign Out</a>

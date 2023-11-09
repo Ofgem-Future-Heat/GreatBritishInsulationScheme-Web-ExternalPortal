@@ -1,0 +1,130 @@
+﻿@page
+
+@model Ofgem.GBI.ExternalPortal.Web.Pages.HomeModel
+@{
+}
+
+<style>
+    .govuk-notification-banner--error {
+        border-color: #942514;
+        background-color: #942514;
+    }
+
+    .govuk-notification-banner__header {
+        padding: 2px 15px 5px;
+        border-bottom: 1px solid transparent;
+    }
+
+    .govuk-notification-banner__title {
+        font-family: "GDS Transport", arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.25;
+        margin: 0;
+        padding: 0;
+        color: #ffffff;
+    }
+
+    .govuk-\!-margin-bottom-5 {
+        margin-bottom: 15px !important;
+    }
+
+    .card {
+        height: 180px;
+        color: white;
+        border: 1px solid #b1b4b6;
+        border-bottom-width: 4px;
+    }
+
+    .govuk-sectio-break--l {
+        margin: 30px 0;
+    }
+
+    .header-break {
+        margin-top: 40px;
+    }
+
+    .footer-break{
+        margin-bottom: 40px;
+    }
+
+</style>
+<div class="govuk-width-container">
+    
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                <h1 class="govuk-heading-xl header-break" data-test-id="page-heading"> Great British Insulation Scheme </h1>
+                <a class="govuk-button" data-test-id="btn-upload-measure-button" asp-page="Measures/UploadMeasures"> Upload a measure file </a>
+                <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+                @if (@Model.LatestValidationResults.Any())
+                {
+                    <div class="govuk-notification-banner govuk-notification-banner--error" data-test-id="notification-banner" role="alert"
+                     aria-labelledby="govuk-notification-banner-title"
+                     data-module="govuk-notification-banner">
+                        <div class="govuk-notification-banner__header" data-test-id="notification-banner-header">
+                            <h2 class="govuk-notification-banner__title" data-test-id="notification-banner-title" id="govuk-notification-banner-title">
+                                Latest error reports
+                            </h2>
+                        </div>
+
+                        <div class="govuk-notification-banner__content" data-test-id="notification-banner-content">
+                            <h3 class="govuk-notification-banner__heading" data-test-id="banner-heading-message">The following files you uploaded include measures containing errors</h3>
+
+                            <table class="govuk-table" data-test-id="dtable">
+                                <thead class="govuk-table__head" data-test-id="table-header">
+                                    <tr class="govuk-table__row" data-test-id="table-row">
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Date</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Time</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">File name</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Error Stage</th>
+                                        <th scope="col" class="govuk-table__header app-custom-class" data-test-id="column-header">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body" data-test-id="latest-validation-results">
+                                    @{
+                                        foreach (var latestValidationResult in @Model.LatestValidationResults)
+                                        {
+                                            <tr class="govuk-table__row" data-test-id="validation-results-row">
+                                                <th scope="row" class="govuk-table__header" data-test-id="validation-result-date">@latestValidationResult.DateTime.ToShortDateString()</th>
+                                                <th scope="row" class="govuk-table__header" data-test-id="validation-result-time">@latestValidationResult.DateTime.ToString(@"h\:mm tt")</th>
+                                                <td class="govuk-table__cell" data-test-id="validation-result-file-name">@latestValidationResult.FileName</td>
+                                                <td class="govuk-table__cell" data-test-id="validation-result-error-stage">@latestValidationResult.ErrorStage</td>
+                                                <td class="govuk-table__cell"><a asp-page-handler="DownloadErrorReport" asp-route-documentId=@latestValidationResult.DocumentId asp-route-fileName=@latestValidationResult.FileName asp-route-stage=@latestValidationResult.ErrorStage data-test-id="latest-error-report">Download error report</a></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                            <p class="govuk-body"><a class="govuk-link" asp-page="/ErrorReports/ExistingErrorReports" data-test-id="home-existing-error-link">View all error reports</a></p>
+                        </div>
+                    </div>
+                    <hr class="govuk-section-break govuk-sectio-break--l govuk-section-break--visible" />
+                }
+            </div>
+        </div>
+ 
+        <div class="govuk-grid-row footer-break">
+            <div class="govuk-grid-column-one-third govuk-!-margin-bottom-5">
+                <div class="card govuk-!-padding-5">
+                    <h3 class="govuk-heading-m"><a data-test-id="home-manage-measures-card-link" asp-page="/Measures/ManageMeasures" class="govuk-link">Managing measures</a></h3>
+                    <p class="govuk-body">Upload new measure files, view status on previously uploaded files and view file extensions.</p>
+                </div>
+            </div>
+
+           <div class="govuk-grid-column-one-third govuk-!-margin-bottom-5">
+                <div class="card govuk-!-padding-5">
+                    <h3 class="govuk-heading-m"><a data-test-id="home-existing-error-reports-card-link" asp-page="/ErrorReports/ExistingErrorReports" class="govuk-link">View all error reports</a></h3>
+                    <p class="govuk-body">View and download all existing error reports.</p>
+                </div>
+            </div>
+        </div>
+    
+</div>
+<hr class="govuk-section-break govuk-sectio-break--l govuk-section-break--visible" />
+
+<h3 class="govuk-heading-l">Get help</h3>
+<p><a href="#" target="_blank">How to upload a measure (opens in a new tab)</a></p>
+<p><a href="#" target="_blank">What you will need to upload a Measure (opens in a new tab)</a></p>

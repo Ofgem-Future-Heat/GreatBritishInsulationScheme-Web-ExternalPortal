@@ -1,0 +1,13 @@
+{
+	"externalUserId": "c32156a8-b2df-46dc-8fdc-08db9fe0b9ab",
+	"providerUserId": "ec712cc6-a9dd-4222-b752-7ede6d5ca861",
+	"firstName": "Name",
+	"lastName": "One",
+	"emailAddress": "one@example.com",
+	"userType": "AuthorisedSignatoryRole",
+	"isActive": true,
+	"supplier": {
+		"supplierId": 1,
+		"supplierName": "EON"
+	}
+}

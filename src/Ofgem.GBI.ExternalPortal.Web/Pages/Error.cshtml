@@ -1,0 +1,17 @@
+﻿@page
+@model Ofgem.GBI.ExternalPortal.Web.Pages.ErrorModel
+@{
+}
+
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+        <h1 class="govuk-heading-l">Sorry, this service is unavailable</h1>
+                @if (string.IsNullOrWhiteSpace(Model.ExceptionMessage))
+                {
+                    <p class="govuk-body">Try again later.</p>
+                }
+                <p class="govuk-body">
+                    @(Html.Raw(Model.ExceptionMessage))
+            </div>
+        </div>
+

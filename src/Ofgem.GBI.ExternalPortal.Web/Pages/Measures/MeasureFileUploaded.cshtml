@@ -1,0 +1,93 @@
+﻿@page
+@model MeasureFileUploadedModel
+@{
+    var anyValidationErrors = Model.NumberOfMeasureValidationErrors > 0;
+    var uploadMeasuresPageName = "UploadMeasures";
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-panel govuk-panel--confirmation" data-test-id="pnl-confirmation">
+            <h1 class="govuk-panel__title" data-test-id="pnlTitle">
+                File uploaded
+            </h1>
+        </div>
+
+        @if (anyValidationErrors) {
+            <h2 class="govuk-heading-l" data-test-id="txt-heading-error">This file has errors</h2>
+
+            <p class="govuk-body" data-test-id="error-body">The file contains @Model.NumberOfMeasureValidationErrors measures with errors. These measures with errors have:</p>
+
+            <ul class="govuk-list govuk-list--bullet" data-test-id="lst-errors">
+                <li data-test-id="lst-errors-item-1">failed the core stage checks</li>
+                <li data-test-id="lst-errors-item-2">not been uploaded into the Great British Insulation Scheme register</li>
+            </ul>
+
+            <p class="govuk-body" data-test-id="txt-download-error-report">You need to download the error report containing the unsuccessful measures to find out why they have failed. You will also receive these errors via email.</p>
+        } else {
+            <p class="govuk-body" data-test-id="txt-no-errors">The core checks found no errors with this file.</p>
+            <p class="govuk-body" data-test-id="txt-measures-added">The measures have been added to the Great British Insulation Scheme (GBIS) register.</p>
+        }
+        <h2 class="govuk-heading-l" data-test-id="txt-heading-what-happens-next">What happens next?</h2>
+
+        @if (anyValidationErrors) {
+            <p class="govuk-body" data-test-id="txt-success-measures-additional-checks">The remaining @Model.NumberOfMeasureValidationSuccesses measures without errors will now go through additional checks to validate the information in the file.</p>
+            <p class="govuk-body" data-test-id="txt-error-measures-no-additional-checks">The measures in the file that contain errors will not progress for additional checks. You must fix these before progressing.</p>
+
+            <h3 class="govuk-heading-m" data-test-id="txt-heading-fixing-errors">Fixing the errors in the file</h3>
+
+            <p class="govuk-body" data-test-id="txt-must-fix-errors">Before you can progress, you must fix the measures containing errors.</p>
+            <p class="govuk-body" data-test-id="txt-fix-errors-to-do">To do this, you must:</p>
+            <ol class="govuk-list govuk-list--number" data-test-id="lst-fix-errors">
+                <li data-test-id="lst-fix-errors-item-1">Download the error report.</li>
+                <li data-test-id="lst-fix-errors-item-2">Follow the instructions in the error report to fix the measures with errors.</li>
+                <li data-test-id="lst-fix-errors-item-3">Reupload the measures that failed the core stage checks in this Great British Insulation Scheme portal.</li>
+            </ol>
+
+            <h2 class="govuk-heading-l" data-test-id="txt-heading-download-error-report">Downloading your error report</h2>
+
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true" data-test-id="icn-warning">!</span>
+                <strong class="govuk-warning-text__text" data-test-id="txt-warning">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    Warning. This is the only opportunity to download the report containing the core check errors.
+                </strong>
+            </div>
+
+            <p class="govuk-body" data-test-id="txt-single-download">If you do not download it here, you'll be unable to access it afterwards and have to upload your file again to generate the error report.</p>
+
+            <div class="govuk-button-group" data-test-id="btn-download-error-report">
+                <a class="govuk-button" data-module="govuk-button" asp-page-handler="DownloadStage1Report" asp-route-documentId=@Model.DocumentId asp-route-fileName=@Model.FileName>
+                    Download error report
+                </a>
+            </div>
+
+            <h3 class="govuk-heading-m" data-test-id="txt-heading-upload">Upload another measure file</h3>
+
+            <p class="govuk-body">
+                <a href="@uploadMeasuresPageName" data-test-id="lnk-upload-measure-file">Upload another measure file</a>
+            </p>
+        } else {
+            <p class="govuk-body" data-test-id="txt-no-errors-additional-checks">The file will now go through several additional checks. We'll take a closer look at the file to check if there are any errors with the details in the file.</p>
+
+            <h3 class="govuk-heading-m" data-test-id="txt-heading-additional-checks-no-errors">If no errors are found during additional checks</h3>
+            <p class="govuk-body" data-test-id="txt-additional-checks-no-errors">If the measures in the file pass the additional checks and no errors are found, these measures will be updated on the Great British Insulation Scheme register.</p>
+
+            <h3 class="govuk-heading-m" data-test-id="txt-heading-additional-checks-errors">If errors are found during additional checks</h3>
+            <p class="govuk-body" data-test-id="txt-additional-checks-errors-1">If the measures are found to have errors during the additional checks, these will not be updated on the register.</p>
+            <p class="govuk-body" data-test-id="txt-additional-checks-errors-2">We'll let you know about this by email. We'll send this to the email address you used to create an account with us.</p>
+            <p class="govuk-body" data-test-id="txt-additional-checks-errors-3">You'll be able to access any error reports relating to the file on the homepage.</p>
+
+
+            <h2 class="govuk-heading-l" data-test-id="txt-heading-additional-file-upload">Have more than one file to upload?</h2>
+            <p class="govuk-body" data-test-id="txt-additional-file-upload">You can upload any additional measure files you have here.</p>
+            <form method="get" asp-page="@uploadMeasuresPageName">
+                <button type="submit" class="govuk-button" data-module="govuk-button" data-test-id="btn-upload-measure-button">Upload another measure</button>
+            </form>
+        }
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+        <p class="govuk-body">
+            <a href="/Home" data-test-id="lnk-homepage">Return to homepage</a>
+        </p>
+    </div>
+</div>
